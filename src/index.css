@@ -1,0 +1,170 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+      "SF Pro Text", "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif,
+      "Apple Color Emoji", "Segoe UI Emoji";
+    line-height: 1.5;
+    font-weight: 400;
+    color: #1d1d1f;
+    background-color: #ffffff;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+  }
+
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  ::selection {
+    background-color: rgba(0, 113, 227, 0.18);
+    color: inherit;
+  }
+}
+
+@layer components {
+  /* 苹果风格按钮 */
+  .btn-apple {
+    @apply inline-flex items-center justify-center gap-2 rounded-apple
+      bg-accent px-5 py-2.5 text-body font-medium text-white
+      transition-all duration-200-apple ease-apple
+      hover:bg-accent-hover active:bg-accent-pressed
+      focus-visible:outline-none focus-visible:shadow-ring
+      disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-apple
+      bg-paper-subtle px-5 py-2.5 text-body font-medium text-ink-soft
+      transition-all duration-200-apple ease-apple
+      hover:bg-paper-card active:bg-paper-subtle
+      focus-visible:outline-none focus-visible:shadow-ring;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full
+      px-3 py-1.5 text-footnote font-medium text-ink-muted
+      transition-all duration-200-apple ease-apple
+      hover:bg-paper-subtle hover:text-ink
+      focus-visible:outline-none focus-visible:shadow-ring;
+  }
+
+  .btn-icon {
+    @apply inline-flex h-9 w-9 items-center justify-center rounded-full
+      text-ink-soft transition-all duration-200-apple ease-apple
+      hover:bg-paper-subtle hover:text-ink
+      active:scale-95 focus-visible:outline-none focus-visible:shadow-ring;
+  }
+
+  /* 苹果风格卡片 */
+  .card-apple {
+    @apply rounded-apple-lg bg-paper border border-black/[0.06]
+      shadow-card;
+  }
+
+  /* 输入框 */
+  .input-apple {
+    @apply w-full rounded-apple bg-paper-subtle px-3.5 py-2.5 text-body
+      text-ink placeholder:text-ink-faint
+      transition-all duration-200-apple ease-apple
+      focus:bg-paper focus:outline-none focus:ring-2 focus:ring-accent/40;
+  }
+
+  /* 分段控件 */
+  .segment {
+    @apply inline-flex rounded-apple bg-paper-subtle p-1 text-footnote;
+  }
+
+  .segment-item {
+    @apply rounded-[8px] px-3 py-1.5 font-medium text-ink-muted
+      transition-all duration-200-apple ease-apple
+      hover:text-ink-soft cursor-pointer;
+  }
+
+  .segment-item-active {
+    @apply bg-paper text-ink shadow-soft;
+  }
+
+  /* 开关 */
+  .switch-apple {
+    @apply relative inline-flex h-[28px] w-[44px] items-center rounded-full
+      bg-ink-faint/40 transition-colors duration-200-apple ease-apple
+      cursor-pointer;
+  }
+
+  .switch-apple-on {
+    @apply bg-success;
+  }
+
+  .switch-thumb {
+    @apply inline-block h-[24px] w-[24px] transform rounded-full
+      bg-white shadow-soft transition-transform duration-200-apple ease-apple;
+  }
+
+  .switch-thumb-on {
+    @apply translate-x-[16px];
+  }
+}
+
+@layer utilities {
+  .glass {
+    background-color: rgba(255, 255, 255, 0.72);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+  }
+
+  .glass-dark {
+    background-color: rgba(245, 245, 247, 0.72);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #1d1d1f 0%, #424245 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .scrollbar-apple {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.18) transparent;
+  }
+  .scrollbar-apple::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .scrollbar-apple::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.18);
+    border-radius: 8px;
+  }
+  .scrollbar-apple::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+  .scrollbar-apple::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
