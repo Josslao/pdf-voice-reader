@@ -26,7 +26,6 @@ export default function ReaderView({ currentIndex, onJump }: ReaderViewProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const activeRef = useRef<HTMLDivElement | null>(null);
 
-  // 预计算可朗读段落: { id -> readableIndex } 与 [readableIndex -> paragraph]
   const readableList = useMemo(
     () => (parsed?.paragraphs ?? []).filter((p) => isReadable(p.kind)),
     [parsed]
@@ -42,7 +41,6 @@ export default function ReaderView({ currentIndex, onJump }: ReaderViewProps) {
       ? readableList[currentIndex].id
       : -1;
 
-  // 自动滚动到当前段落
   useEffect(() => {
     if (!activeRef.current) return;
     activeRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -53,22 +51,22 @@ export default function ReaderView({ currentIndex, onJump }: ReaderViewProps) {
   const total = parsed.paragraphs.length;
 
   return (
-    <div className="card-apple overflow-hidden">
-      <div className="flex items-center justify-between border-b border-black/[0.05] px-5 py-3">
+    <div className="card-ios18 overflow-hidden">
+      <div className="flex items-center justify-between border-b border-black/[0.05] px-4 py-3 sm:px-5">
         <div className="flex items-center gap-2 text-body font-semibold text-ink">
           <ListChecks className="h-4 w-4 text-accent" strokeWidth={1.75} />
           正文预览
         </div>
-        <div className="text-footnote text-ink-muted">
+        <div className="text-caption text-ink-muted sm:text-footnote">
           共 {total} 段 · 可朗读 {readableList.length} 段
         </div>
       </div>
 
       <div
         ref={containerRef}
-        className="scrollbar-apple max-h-[60vh] overflow-y-auto px-5 py-4"
+        className="scrollbar-none max-h-[55vh] overflow-y-auto px-3 py-3 sm:scrollbar-apple sm:max-h-[60vh] sm:px-5 sm:py-4"
       >
-        <div className="space-y-3">
+        <div className="space-y-2 sm:space-y-3">
           {parsed.paragraphs.map((p) => {
             const readable = isReadable(p.kind);
             const isActive = p.id === activeParagraphId;
@@ -78,17 +76,17 @@ export default function ReaderView({ currentIndex, onJump }: ReaderViewProps) {
                 ref={isActive ? activeRef : null}
                 className={`group relative rounded-apple px-3 py-2 transition-all duration-300-apple ease-apple ${
                   isActive
-                    ? "bg-accent-soft shadow-soft"
-                    : "hover:bg-paper-subtle"
+                    ? "bg-accent-soft shadow-soft ring-1 ring-accent/20"
+                    : "active:bg-paper-subtle"
                 } ${!readable ? "opacity-50" : ""}`}
               >
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-2 sm:gap-3">
                   <span className="mt-0.5 inline-flex shrink-0 items-center rounded-full bg-paper-subtle px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-ink-muted">
                     {getKindLabel(p.kind)}
                   </span>
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <p
-                      className={`text-body leading-[1.7] ${KIND_COLOR[p.kind]}`}
+                      className={`text-footnote leading-[1.7] sm:text-body ${KIND_COLOR[p.kind]}`}
                     >
                       {p.text}
                     </p>
@@ -97,7 +95,7 @@ export default function ReaderView({ currentIndex, onJump }: ReaderViewProps) {
                       {readable && (
                         <button
                           type="button"
-                          className="opacity-0 transition-opacity group-hover:opacity-100 text-accent hover:text-accent-hover font-medium"
+                          className="opacity-100 sm:opacity-0 transition-opacity sm:group-hover:opacity-100 text-accent hover:text-accent-hover font-medium"
                           onClick={() => {
                             const idx = idToReadableIdx.get(p.id);
                             if (idx !== undefined) onJump(idx);

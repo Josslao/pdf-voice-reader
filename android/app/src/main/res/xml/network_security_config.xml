@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </base-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <!-- TTS 厂商 API 域名 -->
+        <domain includeSubdomains="true">api.openai.com</domain>
+        <domain includeSubdomains="true">tts.speech.microsoft.com</domain>
+        <domain includeSubdomains="true">api.minimax.chat</domain>
+        <domain includeSubdomains="true">openspeech.bytedance.com</domain>
+        <domain includeSubdomains="true">api.elevenlabs.io</domain>
+        <domain includeSubdomains="true">localhost</domain>
+    </domain-config>
+</network-security-config>

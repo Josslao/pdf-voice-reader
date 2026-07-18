@@ -17,6 +17,10 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: transparent;
+    /* iOS 18 风格:启用 elastic 滚动 + 整页平滑感 */
+    overscroll-behavior-y: none;
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
   }
 
   * {
@@ -27,21 +31,49 @@
   body,
   #root {
     height: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
   }
 
   body {
     margin: 0;
     min-height: 100vh;
+    min-height: 100dvh;
+    /* iOS 18 风格背景:多层渐变营造空间感 */
+    background:
+      radial-gradient(1200px 800px at 50% -20%, rgba(0, 113, 227, 0.06), transparent 70%),
+      radial-gradient(800px 600px at 100% 100%, rgba(120, 80, 245, 0.04), transparent 70%),
+      #ffffff;
+    background-attachment: fixed;
   }
 
   button {
     font-family: inherit;
     cursor: pointer;
+    /* 移动端去掉默认蓝色高亮 */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  input, select, textarea {
+    font-family: inherit;
   }
 
   ::selection {
     background-color: rgba(0, 113, 227, 0.18);
     color: inherit;
+  }
+
+  /* iOS 18 安全区适配 */
+  .safe-top {
+    padding-top: max(env(safe-area-inset-top), 12px);
+  }
+  .safe-bottom {
+    padding-bottom: max(env(safe-area-inset-bottom), 12px);
+  }
+  .safe-x {
+    padding-left: max(env(safe-area-inset-left), 0px);
+    padding-right: max(env(safe-area-inset-right), 0px);
   }
 }
 
@@ -51,7 +83,7 @@
     @apply inline-flex items-center justify-center gap-2 rounded-apple
       bg-accent px-5 py-2.5 text-body font-medium text-white
       transition-all duration-200-apple ease-apple
-      hover:bg-accent-hover active:bg-accent-pressed
+      hover:bg-accent-hover active:bg-accent-pressed active:scale-[0.98]
       focus-visible:outline-none focus-visible:shadow-ring
       disabled:cursor-not-allowed disabled:opacity-40;
   }
@@ -60,7 +92,7 @@
     @apply inline-flex items-center justify-center gap-2 rounded-apple
       bg-paper-subtle px-5 py-2.5 text-body font-medium text-ink-soft
       transition-all duration-200-apple ease-apple
-      hover:bg-paper-card active:bg-paper-subtle
+      hover:bg-paper-card active:bg-paper-subtle active:scale-[0.98]
       focus-visible:outline-none focus-visible:shadow-ring;
   }
 
@@ -68,21 +100,35 @@
     @apply inline-flex items-center justify-center gap-2 rounded-full
       px-3 py-1.5 text-footnote font-medium text-ink-muted
       transition-all duration-200-apple ease-apple
-      hover:bg-paper-subtle hover:text-ink
+      hover:bg-paper-subtle hover:text-ink active:scale-95
       focus-visible:outline-none focus-visible:shadow-ring;
   }
 
   .btn-icon {
     @apply inline-flex h-9 w-9 items-center justify-center rounded-full
       text-ink-soft transition-all duration-200-apple ease-apple
-      hover:bg-paper-subtle hover:text-ink
-      active:scale-95 focus-visible:outline-none focus-visible:shadow-ring;
+      hover:bg-paper-subtle hover:text-ink active:scale-90
+      focus-visible:outline-none focus-visible:shadow-ring;
+  }
+
+  /* 移动端触控区扩大 */
+  .btn-icon-mobile {
+    @apply h-11 w-11;
   }
 
   /* 苹果风格卡片 */
   .card-apple {
     @apply rounded-apple-lg bg-paper border border-black/[0.06]
       shadow-card;
+  }
+
+  /* iOS 18 浮岛卡片:更圆 + 更软阴影 */
+  .card-ios18 {
+    @apply rounded-apple-xl bg-paper border border-black/[0.04];
+    box-shadow:
+      0 1px 2px rgba(0,0,0,0.03),
+      0 8px 24px rgba(0,0,0,0.06),
+      0 0 0 0.5px rgba(0,0,0,0.04);
   }
 
   /* 输入框 */
@@ -93,25 +139,28 @@
       focus:bg-paper focus:outline-none focus:ring-2 focus:ring-accent/40;
   }
 
-  /* 分段控件 */
+  /* 分段控件(iOS 18 风格:更圆角) */
   .segment {
-    @apply inline-flex rounded-apple bg-paper-subtle p-1 text-footnote;
+    @apply inline-flex rounded-[12px] bg-paper-subtle p-1 text-footnote;
   }
 
   .segment-item {
-    @apply rounded-[8px] px-3 py-1.5 font-medium text-ink-muted
+    @apply rounded-[9px] px-3 py-1.5 font-medium text-ink-muted
       transition-all duration-200-apple ease-apple
       hover:text-ink-soft cursor-pointer;
   }
 
   .segment-item-active {
-    @apply bg-paper text-ink shadow-soft;
+    @apply bg-paper text-ink;
+    box-shadow:
+      0 1px 2px rgba(0,0,0,0.04),
+      0 0 0 0.5px rgba(0,0,0,0.04);
   }
 
-  /* 开关 */
+  /* 开关(iOS 18 风格:更大、更柔) */
   .switch-apple {
-    @apply relative inline-flex h-[28px] w-[44px] items-center rounded-full
-      bg-ink-faint/40 transition-colors duration-200-apple ease-apple
+    @apply relative inline-flex h-[31px] w-[51px] items-center rounded-full
+      bg-ink-faint/40 transition-colors duration-300-apple ease-apple
       cursor-pointer;
   }
 
@@ -120,12 +169,15 @@
   }
 
   .switch-thumb {
-    @apply inline-block h-[24px] w-[24px] transform rounded-full
-      bg-white shadow-soft transition-transform duration-200-apple ease-apple;
+    @apply inline-block h-[27px] w-[27px] transform rounded-full
+      bg-white transition-transform duration-300-apple ease-apple;
+    box-shadow:
+      0 3px 8px rgba(0,0,0,0.15),
+      0 0 0 0.5px rgba(0,0,0,0.04);
   }
 
   .switch-thumb-on {
-    @apply translate-x-[16px];
+    @apply translate-x-[20px];
   }
 }
 
@@ -136,6 +188,13 @@
     -webkit-backdrop-filter: saturate(180%) blur(20px);
   }
 
+  /* iOS 18 风格:更厚重的毛玻璃 */
+  .glass-ios18 {
+    background-color: rgba(255, 255, 255, 0.82);
+    backdrop-filter: saturate(180%) blur(30px);
+    -webkit-backdrop-filter: saturate(180%) blur(30px);
+  }
+
   .glass-dark {
     background-color: rgba(245, 245, 247, 0.72);
     backdrop-filter: saturate(180%) blur(20px);
@@ -144,6 +203,14 @@
 
   .text-gradient {
     background: linear-gradient(135deg, #1d1d1f 0%, #424245 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* iOS 18 风格渐变标题色 */
+  .text-gradient-ios18 {
+    background: linear-gradient(135deg, #0071e3 0%, #7c50ff 50%, #ff375f 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -166,5 +233,37 @@
   }
   .scrollbar-apple::-webkit-scrollbar-track {
     background: transparent;
+  }
+
+  /* 隐藏滚动条(iOS 18 风格:沉浸式) */
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* iOS 18 弹性触摸反馈 */
+  .touch-ios18 {
+    transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .touch-ios18:active {
+    transform: scale(0.97);
+  }
+
+  /* safe-area padding 工具类 */
+  .pt-safe { padding-top: env(safe-area-inset-top); }
+  .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+  .pl-safe { padding-left: env(safe-area-inset-left); }
+  .pr-safe { padding-right: env(safe-area-inset-right); }
+  .mt-safe { margin-top: env(safe-area-inset-top); }
+  .mb-safe { margin-bottom: env(safe-area-inset-bottom); }
+
+  /* 移动端底部控制条浮动高度 */
+  .h-dynamic {
+    height: 100dvh;
+  }
+  .min-h-dynamic {
+    min-height: 100dvh;
   }
 }

@@ -14,7 +14,18 @@ dist-ssr
 # 保留 dist 构建产物(方便非开发者直接打开使用)
 !dist/
 
-# Editor directories and files
+# Android 构建产物(只保留最终 APK 到 release/)
+android/.gradle/
+android/build/
+android/app/build/
+android/captures/
+android/local.properties
+android/.idea/
+android/cordova-android-plugins/
+android/capacitor-cordova-android-plugins/build/
+android/capacitor-cordova-android-plugins/.gradle
+
+# 编辑器
 .vscode/*
 !.vscode/extensions.json
 .idea

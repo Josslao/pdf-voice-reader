@@ -12,14 +12,14 @@ export default function Home() {
   const parsed = useStore((s) => s.parsed);
 
   return (
-    <div className="flex min-h-screen flex-col bg-paper">
+    <div className="flex min-h-dynamic flex-col bg-paper">
       <Header />
 
-      <main className="mx-auto w-full max-w-[980px] flex-1 px-5 pb-32">
+      <main className="mx-auto w-full max-w-[980px] flex-1 px-3 pb-44 sm:px-5 sm:pb-40">
         <Hero />
 
         {parsed && (
-          <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-[1fr_320px]">
+          <div className="mt-6 grid grid-cols-1 gap-3 sm:mt-8 sm:gap-5 lg:grid-cols-[1fr_320px]">
             <ReaderView
               currentIndex={player.currentIndex}
               onJump={(idx) => player.playOne(idx)}

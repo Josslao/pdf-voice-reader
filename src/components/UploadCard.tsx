@@ -83,7 +83,7 @@ export default function UploadCard() {
         const file = e.dataTransfer.files?.[0];
         if (file) void handleFile(file);
       }}
-      className={`relative overflow-hidden rounded-apple-lg border-2 border-dashed bg-paper-card transition-all duration-300-apple ease-apple ${
+      className={`relative overflow-hidden rounded-apple-xl border-2 border-dashed bg-paper-card transition-all duration-300-apple ease-apple ${
         dragOver
           ? "border-accent bg-accent-soft scale-[1.01]"
           : "border-black/10 hover:border-accent/40 hover:bg-paper-subtle"
@@ -101,7 +101,7 @@ export default function UploadCard() {
         }}
       />
 
-      <div className="flex flex-col items-center justify-center gap-4 px-6 py-12 text-center">
+      <div className="flex flex-col items-center justify-center gap-4 px-4 py-10 text-center sm:px-6 sm:py-12">
         {parsing ? (
           <>
             <div className="relative">
@@ -126,7 +126,7 @@ export default function UploadCard() {
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
-            className="flex flex-col items-center gap-3 transition-opacity hover:opacity-70"
+            className="flex flex-col items-center gap-3 transition-opacity active:scale-[0.98] touch-ios18"
           >
             <FileText className="h-12 w-12 text-accent" strokeWidth={1.5} />
             <div>
@@ -146,14 +146,14 @@ export default function UploadCard() {
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
-            className="flex flex-col items-center gap-3"
+            className="flex flex-col items-center gap-3 touch-ios18"
           >
-            <div className="rounded-full bg-accent-soft p-4">
-              <UploadCloud className="h-7 w-7 text-accent" strokeWidth={1.75} />
+            <div className="rounded-full bg-accent-soft p-5">
+              <UploadCloud className="h-8 w-8 text-accent" strokeWidth={1.75} />
             </div>
             <div>
               <div className="text-headline font-semibold text-ink">
-                拖入 PDF 或点击上传
+                点击选择 PDF
               </div>
               <div className="mt-1 text-footnote text-ink-muted">
                 仅支持本地解析,文件不会上传服务器
