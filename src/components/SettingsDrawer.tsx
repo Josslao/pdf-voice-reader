@@ -39,11 +39,14 @@ export default function SettingsDrawer() {
         aria-hidden="true"
       />
 
-      {/* iOS 18 风格底部 sheet(桌面端为右侧抽屉) */}
+      {/* iOS 18 风格底部 sheet(桌面端为右侧抽屉)
+       * Android 上:max-h-[88dvh] 避免与状态栏冲突,
+       * 配合 safe-top 让顶部抓手/标题不被遮挡
+       */}
       <aside
         className={`fixed z-50 flex flex-col bg-paper rounded-t-apple-xl shadow-elevated transition-transform duration-400-apple ease-apple
-          left-0 right-0 bottom-0 max-h-[90dvh] rounded-t-apple-xl
-          sm:left-auto sm:top-0 sm:right-0 sm:h-full sm:w-full sm:max-w-[440px] sm:rounded-t-none sm:translate-y-0
+          left-0 right-0 bottom-0 max-h-[88dvh] rounded-t-apple-xl safe-top safe-x
+          sm:left-auto sm:top-0 sm:right-0 sm:h-full sm:w-full sm:max-w-[440px] sm:rounded-t-none sm:pt-0 sm:translate-y-0
           ${open
             ? "translate-y-0 sm:translate-x-0"
             : "translate-y-full sm:translate-y-0 sm:translate-x-full"

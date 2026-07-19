@@ -64,12 +64,29 @@
     color: inherit;
   }
 
-  /* iOS 18 安全区适配 */
+  /* iOS 18 安全区适配
+   * iOS Safari 通过 env(safe-area-inset-*) 暴露安全区,
+   * Android WebView 不暴露这些变量(返回 0)。
+   * 这里用 max() 给 Android 兜底:
+   *   - 顶部 28px:小米13 Pro 挖孔屏约 28px,加大到 32px 保证不撞
+   *   - 底部 20px:Android 手势条 + 圆角屏
+   *   - 左右 0px:圆角屏侧边一般不挡
+   * 当 main.tsx 调用 StatusBar.setOverlaysWebView(false) 后,
+   * Android 状态栏会让位,WebView 内容从状态栏下方开始,
+   * 此时实际不需要 padding,所以仍用 max(env(), 0) 让 env 优先;
+   * 但 env() 在 Android 仍为 0,所以保留兜底值是必要的。
+   */
+  :root {
+    --sat: max(env(safe-area-inset-top), 0px);
+    --sab: max(env(safe-area-inset-bottom), 0px);
+    --sal: max(env(safe-area-inset-left), 0px);
+    --sar: max(env(safe-area-inset-right), 0px);
+  }
   .safe-top {
-    padding-top: max(env(safe-area-inset-top), 12px);
+    padding-top: max(env(safe-area-inset-top), var(--safe-top-fallback, 0px));
   }
   .safe-bottom {
-    padding-bottom: max(env(safe-area-inset-bottom), 12px);
+    padding-bottom: max(env(safe-area-inset-bottom), var(--safe-bottom-fallback, 0px));
   }
   .safe-x {
     padding-left: max(env(safe-area-inset-left), 0px);
@@ -251,13 +268,32 @@
     transform: scale(0.97);
   }
 
-  /* safe-area padding 工具类 */
-  .pt-safe { padding-top: env(safe-area-inset-top); }
-  .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
-  .pl-safe { padding-left: env(safe-area-inset-left); }
-  .pr-safe { padding-right: env(safe-area-inset-right); }
-  .mt-safe { margin-top: env(safe-area-inset-top); }
-  .mb-safe { margin-bottom: env(safe-area-inset-bottom); }
+  /* safe-area padding 工具类(供外层容器用)
+   * Android 兜底:小米13 Pro 等全面屏的状态栏高度约 28-32px,
+   * 通过 .android-fallback 类在 <html class="android"> 时启用兜底值。
+   */
+  .pt-safe { padding-top: max(env(safe-area-inset-top), var(--safe-top-fallback, 0px)); }
+  .pb-safe { padding-bottom: max(env(safe-area-inset-bottom), var(--safe-bottom-fallback, 0px)); }
+  .pl-safe { padding-left: max(env(safe-area-inset-left), 0px); }
+  .pr-safe { padding-right: max(env(safe-area-inset-right), 0px); }
+  .mt-safe { margin-top: max(env(safe-area-inset-top), var(--safe-top-fallback, 0px)); }
+  .mb-safe { margin-bottom: max(env(safe-area-inset-bottom), var(--safe-bottom-fallback, 0px)); }
+
+  /* Android 全面屏兜底
+   * 通过 main.tsx 调用 StatusBar.setOverlaysWebView({overlay:false}) 让状态栏占位,
+   * WebView 内容从状态栏下方开始绘制,理论上不需要额外 padding;
+   * 但部分 ROM(如小米 MIUI)可能强制 overlay=true,所以保留 8px 兜底值,
+   * 既不挡按钮也不会让 Header 离顶部太远。
+   */
+  html.android {
+    --safe-top-fallback: 8px;
+    --safe-bottom-fallback: 20px; /* Android 手势条 + 圆角屏余量 */
+  }
+  /* iOS Safari:env() 自动返回安全区,不需要兜底 */
+  html.ios {
+    --safe-top-fallback: 0px;
+    --safe-bottom-fallback: 0px;
+  }
 
   /* 移动端底部控制条浮动高度 */
   .h-dynamic {
